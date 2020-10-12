@@ -15,8 +15,12 @@ Vagrant.configure('2') do |config|
   end
 
   # 2 discos adicionais de 50GB cada un
-  config.vm.disk :disk, size: "50GB", name: "disk02"
-  config.vm.disk :disk, size: "50GB", name: "disk03"
+  unless File.exist? "disk02"
+    config.vm.disk :disk, size: "50GB", name: "disk02"
+  end
+  unless File.exist? "disk03"
+    config.vm.disk :disk, size: "50GB", name: "disk03"
+  end
 
   # Rede para conectar co servidor
   ip1 = '10.10.10.2'

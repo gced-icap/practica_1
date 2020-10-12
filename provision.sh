@@ -52,7 +52,6 @@ sed 's,\\,\\\\,g' >/etc/issue <<'EOF'
 EOF
 cat >>/etc/issue <<EOF
     https://$ip1:8006/
-    https://$fqdn:8006/
 EOF
 ifup vmbr0
 
@@ -116,5 +115,4 @@ ifreload -c
 cat <<EOF
 access the proxmox web interface at:
     https://$ip1:8006/
-    https://$fqdn:8006/
 EOF
