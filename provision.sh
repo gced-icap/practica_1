@@ -55,11 +55,6 @@ cat >>/etc/issue <<EOF
 EOF
 ifup vmbr0
 
-# disable the "You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options."
-# message that appears each time you logon the web-ui.
-# NB this file is restored when you (re)install the pve-manager package.
-echo 'Proxmox.Utils.checked_command = function(o) { o(); };' >>/usr/share/pve-manager/js/pvemanagerlib.js
-
 # configure the shell.
 cat >/etc/profile.d/login.sh <<'EOF'
 [[ "$-" != *i* ]] && return
@@ -108,8 +103,26 @@ apt-get update
 apt-get -y upgrade
 apt-get install -y ifupdown2
 #apply initial network changes
-mv /etc/network/interfaces.new /etc/network/interfaces
+if [ -e /etc/network/interfaces.new ]; then
+  mv /etc/network/interfaces.new /etc/network/interfaces
+fi
 ifreload -c
+
+# disable the "You do not have a valid subscription for this server. $
+# message that appears each time you logon the web-ui.
+# Proxmox 6.2-12 and up
+sed -i.backup -z "s/res === null || res === undefined || \!res || res$
+
+#enable KVM nested virtualization
+if [ -d /sys/module/kvm_intel ]; then
+  echo "options kvm-intel nested=Y" > /etc/modprobe.d/kvm-intel.conf
+  modprobe -r kvm_intel
+  modprobe kvm_intel
+elif [ -d /sys/module/kvm_amd ]; then
+  echo "options kvm-amd nested=1" > /etc/modprobe.d/kvm-amd.conf
+  modprobe -r kvm_amd
+  modprobe kvm_amd
+fi
 
 # show the proxmox web address.
 cat <<EOF
