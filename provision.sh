@@ -108,10 +108,12 @@ if [ -e /etc/network/interfaces.new ]; then
 fi
 ifreload -c
 
-# disable the "You do not have a valid subscription for this server. $
+# disable the "You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options."
 # message that appears each time you logon the web-ui.
+# NB this file is restored when you (re)install the pve-manager package.
+#echo 'Proxmox.Utils.checked_command = function(o) { o(); };' >>/usr/share/pve-manager/js/pvemanagerlib.js
 # Proxmox 6.2-12 and up
-sed -i.backup -z "s/res === null || res === undefined || \!res || res$
+sed -i.backup -z "s/res === null || res === undefined || \!res || res\n\t\t\t.data.status \!== 'Active'/false/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service
 
 #enable KVM nested virtualization
 if [ -d /sys/module/kvm_intel ]; then
