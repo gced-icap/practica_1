@@ -95,7 +95,7 @@ EOF
 ## desde a GUI sen reinicar a VM)
 # This is neccessary to avoid apt lock error (i.e automatic repo upgrades)
 echo '[INFO] Waiting for unattended upgrades to complete'
-while [ $(pgrep -cf "apt-get|dpkg") -gt 0 ]; do
+while [ $(pgrep -cf "apt|dpkg|unattended") -gt 0 ]; do
   sleep 0.5
 done
 #update packages
