@@ -7,6 +7,11 @@ fqdn=$(hostname --fqdn)
 # configure apt for non-interactive mode.
 export DEBIAN_FRONTEND=noninteractive
 
+# make sure the local apt cache is up to date.
+while true; do
+    apt-get update && break || sleep 5
+done
+
 # configure the network for NATting.
 ifdown vmbr0
 cat >/etc/network/interfaces <<EOF
@@ -55,6 +60,11 @@ cat >>/etc/issue <<EOF
 EOF
 ifup vmbr0
 
+# disable the "You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options."
+# message that appears each time you logon the web-ui.
+# NB this file is restored when you (re)install the pve-manager package.
+echo 'Proxmox.Utils.checked_command = function(o) { o(); };' >>/usr/share/pve-manager/js/pvemanagerlib.js
+
 # configure the shell.
 cat >/etc/profile.d/login.sh <<'EOF'
 [[ "$-" != *i* ]] && return
@@ -93,14 +103,6 @@ EOF
 
 ## install ifupdown2 (necesario para recargar a configuración da rede 
 ## desde a GUI sen reinicar a VM)
-# This is neccessary to avoid apt lock error (i.e automatic repo upgrades)
-echo '[INFO] Waiting for unattended upgrades to complete'
-while [ $(pgrep -cf "apt|dpkg|unattended") -gt 0 ]; do
-  sleep 0.5
-done
-#update packages
-apt-get update
-apt-get -y upgrade
 apt-get install -y ifupdown2
 #apply initial network changes
 if [ -e /etc/network/interfaces.new ]; then
@@ -108,12 +110,6 @@ if [ -e /etc/network/interfaces.new ]; then
 fi
 ifreload -c
 
-# disable the "You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options."
-# message that appears each time you logon the web-ui.
-# NB this file is restored when you (re)install the pve-manager package.
-#echo 'Proxmox.Utils.checked_command = function(o) { o(); };' >>/usr/share/pve-manager/js/pvemanagerlib.js
-# Proxmox 6.2-12 and up
-sed -i.backup -z "s/res === null || res === undefined || \!res || res\n\t\t\t.data.status \!== 'Active'/false/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js && systemctl restart pveproxy.service
 
 #enable KVM nested virtualization
 if [ -d /sys/module/kvm_intel ]; then
