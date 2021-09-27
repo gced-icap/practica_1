@@ -17,8 +17,8 @@ Vagrant.configure('2') do |config|
       filename = "./disks/disk#{i}.vmdk"
       unless File.exist?(filename)
         vb.customize ["createmedium", "disk", "--filename", filename, "--size", 50 * 1024]
-        vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", i + 1, "--device", 0, "--type", "hdd", "--medium", filename]
       end
+      vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", i + 1, "--device", 0, "--type", "hdd", "--medium", filename]
     end
   end
 
