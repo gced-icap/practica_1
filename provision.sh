@@ -120,6 +120,9 @@ elif [ -d /sys/module/kvm_amd ]; then
   echo "options kvm-amd nested=1" > /etc/modprobe.d/kvm-amd.conf
   modprobe -r kvm_amd
   modprobe kvm_amd
+else
+  printf 'KVM kernel module (Intel/AMD) not configured\n' >&2
+  exit -127
 fi
 
 # show the proxmox web address.
