@@ -7,8 +7,8 @@ Vagrant.require_version ">= 2.2.0"
 Vagrant.configure("2") do |config|
 
   # Box de PROXMOX
-  config.vm.box = "xoan/proxmox-ve_6.4"
-  config.vm.box_version = "1.1"
+  config.vm.box = "xoan/proxmox-ve_8.0"
+#  config.vm.box_version = "1.1"
   config.vm.box_check_update = false
 
   # evitamos actualizacións automáticas das VBox Guest Additions

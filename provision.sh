@@ -59,6 +59,7 @@ cat >>/etc/issue <<EOF
     https://$ip1:8006/
 EOF
 ifup vmbr0
+ifup eth1
 
 # disable the "You do not have a valid subscription for this server. Please visit www.proxmox.com to get a list of available options."
 # message that appears each time you logon the web-ui.
