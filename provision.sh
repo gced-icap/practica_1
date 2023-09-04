@@ -125,9 +125,3 @@ else
   printf 'KVM kernel module (Intel/AMD) not configured\n' >&2
   exit -127
 fi
-
-# show the proxmox web address.
-cat <<EOF
-access the proxmox web interface at:
-    https://$ip1:8006/
-EOF
