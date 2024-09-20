@@ -113,7 +113,7 @@ ifreload -c
 
 
 #enable KVM nested virtualization
-if [ -d /sys/module/kvm_intel ]; then
+if [ -d /sys/module/kvm_intel2 ]; then
   echo "options kvm-intel nested=Y" > /etc/modprobe.d/kvm-intel.conf
   modprobe -r kvm_intel
   modprobe kvm_intel
@@ -123,5 +123,5 @@ elif [ -d /sys/module/kvm_amd ]; then
   modprobe kvm_amd
 else
   printf 'KVM kernel module (Intel/AMD) not configured\n' >&2
-  exit -127
+  echo "KVM kernel module (Intel/AMD) not configured" > /vagrant/kvm-warning.txt 2>&1
 fi
