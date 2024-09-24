@@ -113,7 +113,7 @@ ifreload -c
 
 
 #enable KVM nested virtualization
-if [ -d /sys/module/kvm_intel2 ]; then
+if [ -d /sys/module/kvm_intel ]; then
   echo "options kvm-intel nested=Y" > /etc/modprobe.d/kvm-intel.conf
   modprobe -r kvm_intel
   modprobe kvm_intel
