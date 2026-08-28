@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # require a Vagrant recent version
-Vagrant.require_version ">= 2.2.0"
+Vagrant.require_version ">= 2.4.0"
 
 Vagrant.configure("2") do |config|
 
@@ -10,9 +10,6 @@ Vagrant.configure("2") do |config|
   config.vm.box = "xoan/proxmox-ve_8.0"
 #  config.vm.box_version = "1.1"
   config.vm.box_check_update = false
-
-  # evitamos actualizacións automáticas das VBox Guest Additions
-  config.vbguest.auto_update = false
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -36,6 +33,9 @@ Vagrant.configure("2") do |config|
       end
       vb.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", i + 1, "--device", 0, "--type", "hdd", "--medium", filename]
     end
+
+     # Comprobacion das Guest Additions (desactivada por defecto)
+     vb.check_guest_additions = false
   end
 
   # Rede para conectar co servidor
